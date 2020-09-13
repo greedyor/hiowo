@@ -1,0 +1,6 @@
+Options +FollowSymlinks
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [QSA,PT,L]
+RewriteRule ^/movie/([0-9]+)($|/$) /index.php?s=/movie/toMovieInfo/id/$1 [L]
