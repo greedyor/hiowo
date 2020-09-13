@@ -1,0 +1,119 @@
+<html>
+<head>
+    <title>谈谈 mysql 里我们常遇到的坑</title>
+    <meta http-equiv="Content-Type" id="meta_ContentType" content="text/html;charset=UTF-8" />
+    <meta name="keywords" content="hiOwO,hiowo,owo,bloghiowo,hiowoblog,owoblog,owo个人博客,vocaloid">    <link rel="stylesheet" href="../../../public/static/css/base.css?v=0.1">
+    <link rel="stylesheet" href="../../../public/static/css/mobile.css?v=0.2">
+    <link rel="stylesheet" href="../../../public/static/css/element.css">
+    <link rel="stylesheet" href="../../../public/static/editor.md/css/editormd.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../../../public/static/js/jquery-3.3.1.min.js"></script>
+</head>
+<style>
+    .info-bar{
+        width: 100%;position: relative;
+    }
+    .info-bar .subfield li{
+        width: 50%;float: left;overflow: hidden;cursor:pointer;
+    }
+    .info-bar li .info-bar-content{
+        width: 98%;height: 70px;padding: 3px 1% 3px 1%;
+    }
+    .info-bar li .info-bar-content .title{
+        width: 98%;min-height:calc(30px - 6px);max-height:calc(50px - 6px); padding: 3px 1% 3px 1%;float: left;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;line-clamp: 2;-webkit-box-orient: vertical;
+    }
+    .info-bar li .info-bar-content .time{
+        width: 100%;color: #333333;font-size: 14px; text-align: right;float: left;
+    }
+</style>
+<body>
+<nav>
+    <div class="loadlink"></div>
+    <div class="logo">OwO <i class="fa fa-pencil"></i> blog</div>
+    <div class="menu">
+        <ul>
+            <li data-c="index">主页</li>
+            <li data-c="note">笔记</li>
+            <li data-c="download">下载</li>
+            <li data-c="about">关于</li>
+            <li data-c="sarscov">新冠</li>
+        </ul>
+    </div>
+</nav>
+<main>
+    <div class="content">
+        <div style="width:100%;min-height: 200px; margin-top: 5px;padding-top: 5px; float: left;position: relative; background: #f3f3f3">
+            <div class="element-title-diagonal ecolor-ash etype-general"></div><br>
+            <h2>谈谈 mysql 里我们常遇到的坑</h2>
+            <div id="test-editormd-view">
+                <textarea id="hide-textarea" hidden>#### group_concat 的长度限制
+用 group_concat 无非就是想输出拼接完成的字符，方便我们少些几行循环拼接语句，但是我们总会在省事的不经意间写了个bug...
+
+**坑：**
+group_concat 的默认可连接的长度是1024，超过长度不会报错，但是会直接截断在1024字节大小的字符处，可能会直接截出乱码。
+
+当你：`SELECT group_concat('',id,'') FROM test;`
+
+test 表假如有 n 条记录，那么可能会出现返回结果突然截断的情况。
+然后，你可能会一头雾水地翻看 test 表的数据是否有问题...
+
+**解决：**
+1.在 mysql 配置文件修改 group_concat_max_len 的值。
+2.执行 SQL 语句设置:
+```
+SET GLOBAL group_concat_max_len=102400;
+SET SESSION group_concat_max_len=102400;
+```
+3.不用这种方式拼接字符串。
+
+
+#### 对unicode编码的字符进行模糊筛选 ####
+往往会使用到用 json 格式保存到 mysql 数据库的方式，而 json 会把汉子转义为 unicode 编码进行保存，那么问题来了 unicode 格式的字符怎么模糊筛选？
+
+脑袋里想的方式:  
+```mysql
+// 小明 ： \u5c0f\u660e 
+ SELECT * FROM test WHERE jsonData like '%\u5c0f\u660e%'；
+```
+但是并不能获取到想要的结果，为什么呢?
+因为 mysql 会自动把‘ \ ’号过滤了，可以使用 ‘ _ ’ 代替 ‘ \ ’ 进行筛选。
+所以就要改成这样：
+```mysql 
+ SELECT * FROM test WHERE jsonData like '%_u5c0f_u660e%'；
+```
+这样就可以了。
+
+> 持续更新，未完待续~</textarea>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../../../public/static/editor.md/editormd.js"></script>
+<script>
+    $(function() {
+        var testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+            markdown:$('#hide-textarea').text(),
+            htmlDecode: "style,script,iframe",  // you can filter tags decode
+            emoji: true,
+            taskList: true,
+            tex: true,  // 默认不解析
+            flowChart: true,  // 默认不解析
+            sequenceDiagram: true,  // 默认不解析,
+        });
+    });
+</script>
+<footer>
+    <div class="subject">
+        <div class="jump"><a href="https://github.com/greedyor" target="_blank" title="到 greedyor 的 github 主页"><i class="fa fa-github github"></i></a></div>
+        <div class="keep_on_record">hiowo 个人博客 粤ICP备18160458号-1</div>
+    </div>
+</footer>
+<script src="../../../public/static/js/base.js?v=0.3"></script>
+<script src="../../../public/static/editor.md/lib/marked.min.js"></script>
+<script src="../../../public/static/editor.md/lib/prettify.min.js"></script>
+<script src="../../../public/static/editor.md/lib/raphael.min.js"></script>
+<script src="../../../public/static/editor.md/lib/underscore.min.js"></script>
+<script src="../../../public/static/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="../../../public/static/editor.md/lib/flowchart.min.js"></script>
+<script src="../../../public/static/editor.md/lib/jquery.flowchart.min.js"></script>
+</html>
