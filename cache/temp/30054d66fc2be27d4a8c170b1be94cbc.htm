@@ -1,0 +1,82 @@
+<html>
+<head>
+    <title>swoole 如何“重新定义PHP”</title>
+    <meta http-equiv="Content-Type" id="meta_ContentType" content="text/html;charset=UTF-8" />
+    <meta name="keywords" content="hiOwO,hiowo,owo,bloghiowo,hiowoblog,owoblog,owo个人博客,vocaloid">    <link rel="stylesheet" href="../../../public/static/css/base.css?v=0.1">
+    <link rel="stylesheet" href="../../../public/static/css/mobile.css?v=0.2">
+    <link rel="stylesheet" href="../../../public/static/css/element.css">
+    <link rel="stylesheet" href="../../../public/static/editor.md/css/editormd.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../../../public/static/js/jquery-3.3.1.min.js"></script>
+</head>
+<style>
+    .info-bar{
+        width: 100%;position: relative;
+    }
+    .info-bar .subfield li{
+        width: 50%;float: left;overflow: hidden;cursor:pointer;
+    }
+    .info-bar li .info-bar-content{
+        width: 98%;height: 70px;padding: 3px 1% 3px 1%;
+    }
+    .info-bar li .info-bar-content .title{
+        width: 98%;min-height:calc(30px - 6px);max-height:calc(50px - 6px); padding: 3px 1% 3px 1%;float: left;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;line-clamp: 2;-webkit-box-orient: vertical;
+    }
+    .info-bar li .info-bar-content .time{
+        width: 100%;color: #333333;font-size: 14px; text-align: right;float: left;
+    }
+</style>
+<body>
+<nav>
+    <div class="loadlink"></div>
+    <div class="logo">OwO <i class="fa fa-pencil"></i> blog</div>
+    <div class="menu">
+        <ul>
+            <li data-c="index">主页</li>
+            <li data-c="note">笔记</li>
+            <li data-c="download">下载</li>
+            <li data-c="about">关于</li>
+            <li data-c="sarscov">新冠</li>
+        </ul>
+    </div>
+</nav>
+<main>
+    <div class="content">
+        <div style="width:100%;min-height: 200px; margin-top: 5px;padding-top: 5px; float: left;position: relative; background: #f3f3f3">
+            <div class="element-title-diagonal ecolor-ash etype-general"></div><br>
+            <h2>swoole 如何“重新定义PHP”</h2>
+            <div id="test-editormd-view">
+                <textarea id="hide-textarea" hidden>s</textarea>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../../../public/static/editor.md/editormd.js"></script>
+<script>
+    $(function() {
+        var testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+            markdown:$('#hide-textarea').text(),
+            htmlDecode: "style,script,iframe",  // you can filter tags decode
+            emoji: true,
+            taskList: true,
+            tex: true,  // 默认不解析
+            flowChart: true,  // 默认不解析
+            sequenceDiagram: true,  // 默认不解析,
+        });
+    });
+</script>
+<footer>
+    <div class="subject">
+        <div class="jump"><a href="https://github.com/greedyor" target="_blank" title="到 greedyor 的 github 主页"><i class="fa fa-github github"></i></a></div>
+        <div class="keep_on_record">hiowo 个人博客 粤ICP备18160458号-1</div>
+    </div>
+</footer>
+<script src="../../../public/static/js/base.js?v=0.3"></script>
+<script src="../../../public/static/editor.md/lib/marked.min.js"></script>
+<script src="../../../public/static/editor.md/lib/prettify.min.js"></script>
+<script src="../../../public/static/editor.md/lib/raphael.min.js"></script>
+<script src="../../../public/static/editor.md/lib/underscore.min.js"></script>
+<script src="../../../public/static/editor.md/lib/sequence-diagram.min.js"></script>
+<script src="../../../public/static/editor.md/lib/flowchart.min.js"></script>
+<script src="../../../public/static/editor.md/lib/jquery.flowchart.min.js"></script>
+</html>
